@@ -45,8 +45,8 @@ async function init() {
 
       //  -----------------------------------------------------------------------------------
 
-      await mriCubeTokenManager.getToken();
-      logger.info(`✅ Token fetched successfully`);
+      const token = await mriCubeTokenManager.getToken();
+      logger.info(`✅ Token fetched successfully ${token.slice(0, 10)}`);
     } catch (error) {
       logger.error("❌ HubSpot client failed to initialize:", error);
     }

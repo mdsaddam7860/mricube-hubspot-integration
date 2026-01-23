@@ -11,14 +11,12 @@ async function fetchToken() {
 
     const data = response.data;
 
-    console.log("Token response:", data);
-
     return {
       tokenValue: data.tokenValue,
       expiresInMins: data.expiresInMins,
     };
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching token:",
       error.response?.data || error.message
     );
@@ -93,15 +91,15 @@ class MRICubeTokenManager {
       // Calculate expiry in ms
       this.expiresAt = Date.now() + data.expiresInMins * 60 * 1000;
 
-      console.info(
-        `MRI Cube token refreshed. Expires in ${data.expiresInMins} minutes`
+      logger.info(
+        `➡️  MRI Cube token refreshed. Expires in ${data.expiresInMins} minutes`
       );
 
       return this.accessToken;
     } catch (error) {
-      console.error(
+      logger.error(
         "Failed to refresh MRI Cube token",
-        error.response?.data || error.message
+        error.response?.data || error
       );
       this.accessToken = null;
       this.expiresAt = null;
