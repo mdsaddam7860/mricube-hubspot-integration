@@ -8,8 +8,10 @@ import {
   fetchToken,
   mriCubeTokenManager,
 } from "./services/auth/tokenManager.js";
+import { getMRIAxios } from "./configs/mricube.config.js";
 
 export {
+  getMRIAxios,
   logger,
   axiosInstance,
   hubspotClient,
