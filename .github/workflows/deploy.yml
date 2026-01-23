@@ -36,7 +36,7 @@ jobs:
 
           # Ensure PM2 is in PATH and restart/start the app
           export PATH=$PATH:/usr/local/bin
-          pm2 restart mri_cube_server || pm2 start ecosystem.config.js
+          /home/master/bin/npm/lib/node_modules/bin/pm2 restart mri_cube_server || /home/master/bin/npm/lib/node_modules/bin/pm2 start ecosystem.config.js
 
           echo "Deployment completed successfully"
           EOF
