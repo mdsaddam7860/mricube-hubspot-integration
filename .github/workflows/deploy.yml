@@ -25,11 +25,18 @@ jobs:
           ssh -i ~/.ssh/id_ed25519 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           set -e
 
+          # Go to project directory
           cd ~/applications/qrcwtvjnna/public_html/mricube-hubspot-integration
 
+          # Pull latest code
           git pull origin main
+
+          # Install dependencies (production only)
           npm ci --production
-          pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js
+
+          # Ensure PM2 is in PATH and restart/start the app
+          export PATH=$PATH:/usr/local/bin
+          pm2 restart mri_cube_server || pm2 start ecosystem.config.js
 
           echo "Deployment completed successfully"
           EOF
