@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mdsaddam7860/server-blueprint.git"
+    "url": "git+https://github.com/mdsaddam7860/mricube-hubspot-integration"
   },
   "author": "Mohammad Saddam",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mdsaddam7860/server-blueprint/issues"
+    "url": "https://github.com/mdsaddam7860/mricube-hubspot-integration/issues"
   },
-  "homepage": "https://github.com/mdsaddam7860/server-blueprint#readme",
+  "homepage": "https://github.com/mdsaddam7860/mricube-hubspot-integration#readme",
   "description": "",
   "dependencies": {
     "@mohammadsaddam-dev/hubspot-toolkit": "^0.10.0",
