@@ -4,7 +4,11 @@ dotenv.config({
   path: path.join(process.cwd(), ".env"),
 });
 import { app } from "./src/app.js";
-import { logger, mriCubeTokenManager } from "./src/index.js";
+import {
+  logger,
+  mriCubeTokenManager,
+  syncUnitsToHubspot,
+} from "./src/index.js";
 import { getHubspotClient } from "./src/configs/hubspot.config.js";
 
 // Start the server, For CI/CD deployments remove deploy.yml from .gitignore
@@ -43,10 +47,12 @@ async function init() {
       // );
       logger.info(`✅ HubSpot client initialized successfully`);
 
-      //  -----------------------------------------------------------------------------------
-
       const token = await mriCubeTokenManager.getToken();
       logger.info(`✅ Token fetched successfully ${token.slice(0, 10)}`);
+
+      //  -----------------------------------------------------------------------------------
+
+      await syncUnitsToHubspot();
     } catch (error) {
       logger.error("❌ HubSpot client failed to initialize:", error);
     }

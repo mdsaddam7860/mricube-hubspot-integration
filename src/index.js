@@ -9,8 +9,16 @@ import {
   mriCubeTokenManager,
 } from "./services/auth/tokenManager.js";
 import { getMRIAxios } from "./configs/mricube.config.js";
+import { fetchUnits, fetchTenants } from "./services/mricube.service.js";
+import { syncTenantsToHubspot } from "./controllers/tenant2way.controller.js";
+import { syncUnitsToHubspot } from "./controllers/unit2way.controller.js";
+// import {} from "";
 
 export {
+  syncUnitsToHubspot,
+  syncTenantsToHubspot,
+  fetchUnits,
+  fetchTenants,
   getMRIAxios,
   logger,
   axiosInstance,
