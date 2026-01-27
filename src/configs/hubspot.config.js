@@ -1,5 +1,6 @@
 import { createClient } from "@mohammadsaddam-dev/hubspot-toolkit";
 import axios from "axios";
+import { logger } from "../index.js";
 
 const axiosInstance = axios.create({
   baseURL: "https://api.hubapi.com/",

@@ -2,7 +2,7 @@ import axios from "axios";
 
 function getMRIAxios(token) {
   return axios.create({
-    baseURL: "https://2760-portals.qubeglobalcloud.com/RestAPI/v1",
+    baseURL: process.env.MRI_API_BASE_URL,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
