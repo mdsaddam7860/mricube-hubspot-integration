@@ -4,6 +4,7 @@ import {
   creatTenant,
   updateTenant,
   tenantPayload,
+  getTenantsHS,
 } from "../index.js";
 import { mriExecutor, hubspotExecutor } from "../utils/executors.js";
 
@@ -11,7 +12,6 @@ async function syncTenantsToHubspot() {
   try {
     const tenants = await fetchTenants();
     logger.info(`Syncing ${tenants.length} tenants to HubSpot`);
-    logger.info(`Tenant ${JSON.stringify(tenants[0], null, 2)} `);
 
     for (const [index, tenant] of tenants.entries()) {
       try {
@@ -26,13 +26,18 @@ async function syncTenantsToHubspot() {
         let upsertTenant = "46543924391";
         if (upsertTenant) {
           //➡️ Update tenant
-          upsertTenant = await updateTenant("46543924391", payload);
+          upsertTenant = await hubspotExecutor(
+            () => updateTenant("46543924391", payload),
+            { name: "Update Tenant in Hubspot" }
+          );
           logger.info(
             `Tenant UPDATED: ${JSON.stringify(upsertTenant, null, 2)}`
           );
         } else {
           //➡️ Create tenant
-          upsertTenant = await creatTenant(payload);
+          upsertTenant = await hubspotExecutor(() => creatTenant(payload), {
+            name: "Create Tenant in Hubspot",
+          });
           logger.info(
             `Tenant CREATED: ${JSON.stringify(upsertTenant, null, 2)}`
           );
@@ -51,4 +56,12 @@ async function syncTenantsToHubspot() {
   }
 }
 
-export { syncTenantsToHubspot };
+async function syncHSTenantsToMRI() {
+  try {
+    /**TODO - Get Tenants from HUbspot and upsert it into MRI Cube */
+  } catch (error) {
+    logger.error("Error syncing Tenants to MRI Cube:", error);
+  }
+}
+
+export { syncTenantsToHubspot, syncHSTenantsToMRI };

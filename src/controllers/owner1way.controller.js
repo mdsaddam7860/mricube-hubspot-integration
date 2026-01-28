@@ -26,11 +26,16 @@ async function syncOwnersToHubspot() {
 
         if (upsert) {
           //➡️ Update owner
-          upsert = await updateOwner("45613011028", payload);
+          upsert = await hubspotExecutor(
+            () => updateOwner("45613011028", payload),
+            { name: "Update Owner in Hubsot" }
+          );
           logger.info(`Owner UPDATE ${JSON.stringify(upsert, null, 2)}`);
         } else {
           //➡️ Create Owner
-          upsert = await createOwner(payload);
+          upsert = await hubspotExecutor(() => createOwner(payload), {
+            name: "Create Owner in Hubspot",
+          });
           logger.info(`Owner CREATED: ${JSON.stringify(upsert, null, 2)}`);
         }
 

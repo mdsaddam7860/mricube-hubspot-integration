@@ -29,8 +29,7 @@ async function getOwners() {
   const allOwners = [];
   let after = "";
   try {
-    const hubspot = getHubspotClient();
-    const owners = hubspot.customObject("2-56396006"); //Initialize Owner
+    const owners = getCustomClientClient("owners");
     const properties = ownerProperties();
 
     do {
@@ -57,6 +56,111 @@ async function getOwners() {
   } catch (error) {
     logger.error(
       "Error fetching Owners from Hubspot:",
+      error.response?.data || error
+    );
+  }
+}
+async function getTenantsHS() {
+  const allTenants = [];
+  let after = "";
+  try {
+    const tenants = getCustomClientClient("tenants");
+    const properties = ownerProperties();
+
+    do {
+      const response = await tenants.search({
+        filterGroups: [],
+        properties,
+        limit: 100,
+        after,
+      });
+
+      const fetchedTenants = response.results;
+      //   logger.info(`Fetched ${fetchedOwners.length} Tenants successfully`);
+
+      allTenants.push(...fetchedTenants);
+
+      after = response.paging?.next?.after;
+    } while (after);
+
+    logger.info(
+      `Fetched ${JSON.stringify(allTenants.length)} Tenants successfully`
+    );
+
+    return allTenants;
+  } catch (error) {
+    logger.error(
+      "Error fetching Tenants from Hubspot:",
+      error.response?.data || error
+    );
+  }
+}
+async function getUnitsHS() {
+  const allUnits = [];
+  let after = "";
+  try {
+    const units = getCustomClientClient("units");
+    const properties = ownerProperties();
+
+    do {
+      const response = await units.search({
+        filterGroups: [],
+        properties,
+        limit: 100,
+        after,
+      });
+
+      const fetchedUnits = response.results;
+      //   logger.info(`Fetched ${fetchedOwners.length} Tenants successfully`);
+
+      allUnits.push(...fetchedUnits);
+
+      after = response.paging?.next?.after;
+    } while (after);
+
+    logger.info(
+      `Fetched ${JSON.stringify(allUnits.length)} Units successfully`
+    );
+
+    return allUnits;
+  } catch (error) {
+    logger.error(
+      "Error fetching units from Hubspot:",
+      error.response?.data || error
+    );
+  }
+}
+async function getPropertiesHS() {
+  const allProerties = [];
+  let after = "";
+  try {
+    const properties_client = getCustomClientClient("properties");
+    const properties = ownerProperties();
+
+    do {
+      const response = await properties_client.search({
+        filterGroups: [],
+        properties,
+        limit: 100,
+        after,
+      });
+
+      const fetchedProperties = response.results;
+      //   logger.info(`Fetched ${fetchedOwners.length} Tenants successfully`);
+
+      allProerties.push(...fetchedProperties);
+
+      after = response.paging?.next?.after;
+    } while (after);
+
+    logger.info(
+      `Fetched ${JSON.stringify(allProerties.length)} Properties successfully`
+    );
+
+    return allProerties;
+  } catch (error) {
+    logger.error(
+      "Error fetching Properties from Hubspot:",
       error.response?.data || error
     );
   }
@@ -309,6 +413,9 @@ async function creatUnit(payload) {
   }
 }
 export {
+  getPropertiesHS,
+  getUnitsHS,
+  getTenantsHS,
   updateProperty,
   createProperty,
   getOwners,

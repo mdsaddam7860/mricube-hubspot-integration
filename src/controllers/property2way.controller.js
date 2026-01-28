@@ -6,6 +6,7 @@ import {
   updateProperty,
   createProperty,
   propertyPayload,
+  getPropertiesHS,
 } from "../index.js";
 import { mriExecutor, hubspotExecutor } from "../utils/executors.js";
 
@@ -35,13 +36,19 @@ async function syncPropertiesToHubspot() {
 
         if (upsertProperty) {
           //➡️ Update Property
-          upsertProperty = await updateProperty("46529526090", payload);
+          upsertProperty = await hubspotExecutor(
+            () => updateProperty("46529526090", payload),
+            { name: "Update Property in Hubspot" }
+          );
           logger.info(
             `Property UPDATED: ${JSON.stringify(upsertProperty, null, 2)}`
           );
         } else {
           //➡️ Create property
-          upsertProperty = await createProperty(payload);
+          upsertProperty = await hubspotExecutor(
+            () => createProperty(payload),
+            { name: "Create Property in Hubspot" }
+          );
           logger.info(
             `Property CREATED: ${JSON.stringify(upsertProperty, null, 2)}`
           );
@@ -61,4 +68,11 @@ async function syncPropertiesToHubspot() {
   }
 }
 
-export { syncPropertiesToHubspot };
+async function syncHSPropertyToMRI() {
+  try {
+    // get property from hubspot and upsert it into MRI Cube
+  } catch (error) {
+    logger.error("Error syncing proeperties to MRI Cube:", error);
+  }
+}
+export { syncPropertiesToHubspot, syncHSPropertyToMRI };

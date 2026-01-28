@@ -15,9 +15,18 @@ import {
   fetchProperties,
   fetchOwners,
 } from "./services/mricube.service.js";
-import { syncTenantsToHubspot } from "./controllers/tenant2way.controller.js";
-import { syncUnitsToHubspot } from "./controllers/unit2way.controller.js";
-import { syncPropertiesToHubspot } from "./controllers/property2way.controller.js";
+import {
+  syncTenantsToHubspot,
+  syncHSTenantsToMRI,
+} from "./controllers/tenant2way.controller.js";
+import {
+  syncUnitsToHubspot,
+  syncHSUnitsToMRI,
+} from "./controllers/unit2way.controller.js";
+import {
+  syncPropertiesToHubspot,
+  syncHSPropertyToMRI,
+} from "./controllers/property2way.controller.js";
 import { syncOwnersToHubspot } from "./controllers/owner1way.controller.js";
 
 import {
@@ -33,22 +42,41 @@ import {
   updateUnit,
   creatTenant,
   updateTenant,
+  getTenantsHS,
+  getUnitsHS,
+  getPropertiesHS,
 } from "./services/hubspot.service.js";
 
 import {
-  ownerPayload,
-  unitPayload,
-  propertyPayload,
-  tenantPayload,
   ownerProperties,
   unitProperties,
   tenantProperties,
   propertyProperties,
 } from "./utils/hubspot.util.js";
 
+import {
+  mri_unit_payload,
+  mri_tenant_payload,
+  mri_property_payload,
+} from "./mapppers/mri_cube.mapping.js";
+import {
+  ownerPayload,
+  unitPayload,
+  propertyPayload,
+  tenantPayload,
+} from "./mapppers/hubspot.mapping.js";
 // import {} from "";
 
 export {
+  getPropertiesHS,
+  getUnitsHS,
+  getTenantsHS,
+  syncHSPropertyToMRI,
+  syncHSTenantsToMRI,
+  syncHSUnitsToMRI,
+  mri_unit_payload,
+  mri_tenant_payload,
+  mri_property_payload,
   tenantPayload,
   unitProperties,
   tenantProperties,

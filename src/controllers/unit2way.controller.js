@@ -4,6 +4,7 @@ import {
   creatUnit,
   updateUnit,
   unitPayload,
+  getUnitsHS,
 } from "../index.js";
 import { mriExecutor, hubspotExecutor } from "../utils/executors.js";
 
@@ -11,7 +12,6 @@ async function syncUnitsToHubspot() {
   try {
     const units = await fetchUnits();
     logger.info(`Syncing ${units.length} units to HubSpot`);
-    logger.info(`Unit ${JSON.stringify(units[0], null, 2)} `);
 
     for (const [index, unit] of units.entries()) {
       try {
@@ -28,14 +28,19 @@ async function syncUnitsToHubspot() {
         //➡️ create payload for creating/updating unit in hubspot
         const payload = unitPayload(unit);
 
-        let upsert = null;
+        let upsert = "46500353134";
         if (upsert) {
           //➡️ Update unit
-          upsert = await updateUnit("45613011028", payload);
+          upsert = await hubspotExecutor(
+            () => updateUnit("46500353134", payload),
+            { name: "Update Unit in Hubspot" }
+          );
           logger.info(`Unit UPDATED: ${JSON.stringify(upsert, null, 2)}`);
         } else {
           //➡️ Create unit
-          upsert = await creatUnit(payload);
+          upsert = await hubspotExecutor(() => creatUnit(payload), {
+            name: "Create Unit in Hubspot",
+          });
           logger.info(`Unit CREATED: ${JSON.stringify(upsert, null, 2)}`);
         }
 
@@ -53,4 +58,12 @@ async function syncUnitsToHubspot() {
   }
 }
 
-export { syncUnitsToHubspot };
+async function syncHSUnitsToMRI() {
+  try {
+    /**TODO - Get Tenants from HUbspot and upsert it into MRI Cube */
+  } catch (error) {
+    logger.error("Error syncing units to MRI Cube:", error);
+  }
+}
+
+export { syncUnitsToHubspot, syncHSUnitsToMRI };
