@@ -1,4 +1,6 @@
 import { logger, getMRIAxios, mriCubeTokenManager } from "../index.js";
+import { mriExecutor } from "../utils/executors.js";
+
 async function fetchUnits() {
   try {
     const accessToken = await mriCubeTokenManager.getToken();

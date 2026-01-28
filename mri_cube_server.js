@@ -7,7 +7,7 @@ import { app } from "./src/app.js";
 import {
   logger,
   mriCubeTokenManager,
-  syncOwnersToHubspot,
+  syncUnitsToHubspot,
 } from "./src/index.js";
 import { getHubspotClient } from "./src/configs/hubspot.config.js";
 
@@ -52,7 +52,7 @@ async function init() {
 
       //  -----------------------------------------------------------------------------------
 
-      await syncOwnersToHubspot();
+      await syncUnitsToHubspot();
     } catch (error) {
       logger.error("❌ HubSpot client failed to initialize:", error);
     }

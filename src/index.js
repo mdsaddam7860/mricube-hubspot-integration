@@ -21,16 +21,48 @@ import { syncPropertiesToHubspot } from "./controllers/property2way.controller.j
 import { syncOwnersToHubspot } from "./controllers/owner1way.controller.js";
 
 import {
+  updateProperty,
+  createProperty,
   getOwners,
   getOwnerById,
   getProperties,
   upsertOwner,
+  updateOwner,
+  createOwner,
+  creatUnit,
+  updateUnit,
+  creatTenant,
+  updateTenant,
 } from "./services/hubspot.service.js";
 
-import { ownerProperties, ownerPayload } from "./utils/hubspot.util.js";
+import {
+  ownerPayload,
+  unitPayload,
+  propertyPayload,
+  tenantPayload,
+  ownerProperties,
+  unitProperties,
+  tenantProperties,
+  propertyProperties,
+} from "./utils/hubspot.util.js";
+
 // import {} from "";
 
 export {
+  tenantPayload,
+  unitProperties,
+  tenantProperties,
+  propertyProperties,
+  unitPayload,
+  propertyPayload,
+  updateProperty,
+  createProperty,
+  createOwner,
+  updateOwner,
+  creatUnit,
+  updateUnit,
+  creatTenant,
+  updateTenant,
   ownerPayload,
   upsertOwner,
   ownerProperties,

@@ -1,5 +1,29 @@
 import { logger, ownerProperties } from "../index.js";
 import { getHubspotClient } from "../configs/hubspot.config.js";
+import { hubspotExecutor } from "../utils/executors.js";
+
+// function getOwnersClient() {
+//   const hubspot = getHubspotClient();
+//   return hubspot.customObject("2-56396006");
+// }
+const CUSTOM_OBJECT_IDS = Object.freeze({
+  OWNERS: "2-56396006",
+  PROPERTIES: "2-52810768",
+  UNITS: "2-52810797",
+  TENANTS: "2-52810711",
+});
+
+function getCustomClientClient(client) {
+  const hubspot = getHubspotClient();
+  const key = client.toUpperCase();
+
+  const objectId = CUSTOM_OBJECT_IDS[key];
+  if (!objectId) {
+    throw new Error(`Unknown HubSpot custom object: ${client}`);
+  }
+
+  return hubspot.customObject(objectId);
+}
 
 async function getOwners() {
   const allOwners = [];
@@ -38,10 +62,14 @@ async function getOwners() {
   }
 }
 
-async function getOwnerById() {
+async function getOwnerById(ownerId) {
+  if (!ownerId) {
+    logger.warn("Owner id is required");
+    return;
+  }
   try {
-    const hubspot = getHubspotClient();
-    const owners = hubspot.customObject("2-56396006");
+    // const hubspot = getHubspotClient();
+    // const owners = hubspot.customObject("2-56396006");
     const allOwners = [];
     let after = "";
 
@@ -50,8 +78,13 @@ async function getOwnerById() {
 
     // logger.info(`${JSON.stringify(owners, null, 2)}`);
 
-    // const owner = await owners.getById("45613011028", ["owner_name"]);
+    const owners = getCustomClientClient("owners");
+
     const properties = ownerProperties();
+    const owner = await owners.getById("45613011028", properties);
+
+    logger.info(`Owner ${JSON.stringify(owner, null, 2)}`);
+    return;
 
     do {
       const response = await owners.search({
@@ -120,17 +153,13 @@ async function getProperties() {
   }
 }
 
-async function upsertOwner(payload) {
+async function upsertOwner(payload, owner) {
   try {
-    const hubspot = getHubspotClient();
-    const owners = hubspot.customObject("2-56396006"); //Initialize Owner
+    // const hubspot = getHubspotClient();
+    const owners = getCustomClientClient("owners");
     // const properties = ownerProperties();
 
-    const response = await owners.upsert(
-      "owner_name",
-      payload.owner_name,
-      payload
-    );
+    const response = await owners.upsert("owner_name", owner.name, payload);
 
     logger.info(`Owner UPSERT${JSON.stringify(response, null, 2)}`);
 
@@ -142,4 +171,154 @@ async function upsertOwner(payload) {
     );
   }
 }
-export { getOwners, getOwnerById, getProperties, upsertOwner };
+
+async function updateProperty(propertyId, payload) {
+  if (!propertyId) {
+    logger.warn("Property id is required");
+    return;
+  }
+  try {
+    // Update Property
+    const property = getCustomClientClient("properties");
+    const response = await property.update(propertyId, payload);
+
+    return response;
+  } catch (error) {
+    logger.error(
+      "Error updateProperty in Hubspot:",
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+async function createProperty(payload = null) {
+  if (!payload) {
+    logger.warn("Property payload is required");
+    return;
+  }
+  try {
+    // Create Property
+    const property = getCustomClientClient("properties");
+    const response = await property.create(payload);
+    // logger.info(`Owner CREATED : ${JSON.stringify(response, null, 2)}`);
+
+    return response;
+  } catch (error) {
+    logger.error(
+      "Error create property in Hubspot:",
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+async function updateOwner(ownerId, payload) {
+  try {
+    // Update owner
+    const owner = getCustomClientClient("owners");
+    const response = await owner.update(ownerId, payload);
+
+    return response;
+  } catch (error) {
+    logger.error(
+      "Error updateOwner in Hubspot:",
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+async function createOwner(payload) {
+  try {
+    // Update owner
+    const owner = getCustomClientClient("owners");
+    const response = await owner.create(payload);
+    // logger.info(`Owner CREATED : ${JSON.stringify(response, null, 2)}`);
+
+    return response;
+  } catch (error) {
+    logger.error(
+      "Error createOwner in Hubspot:",
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+async function updateTenant(tenantId, payload) {
+  if (!tenantId) {
+    logger.warn("Tenant id is required");
+    return;
+  }
+  try {
+    // Update tenant
+    const tenant = getCustomClientClient("tenants");
+    const response = await tenant.update(tenantId, payload);
+
+    return response;
+  } catch (error) {
+    logger.error(
+      "Error updatetenant in Hubspot:",
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+async function creatTenant(payload = null) {
+  if (!payload) {
+    logger.warn("Payload id is required");
+    return;
+  }
+  try {
+    // Create tenant
+    const tenant = getCustomClientClient("tenants");
+    const response = await tenant.create(payload);
+
+    return response;
+  } catch (error) {
+    logger.error(
+      "Error createOwner in Hubspot:",
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+async function updateUnit(unitId, payload) {
+  try {
+    // Update unit
+    const unit = getCustomClientClient("units");
+    const response = await unit.update(unitId, payload);
+
+    return response;
+  } catch (error) {
+    logger.error("Error updateunit in Hubspot:", error.response?.data || error);
+    throw error;
+  }
+}
+async function creatUnit(payload) {
+  if (!payload) {
+    logger.warn("Payload is required");
+    return;
+  }
+  try {
+    // Create unit
+    const unit = getCustomClientClient("units");
+    const response = await unit.create(payload);
+
+    return response;
+  } catch (error) {
+    logger.error("Error createunit in Hubspot:", error.response?.data || error);
+    throw error;
+  }
+}
+export {
+  updateProperty,
+  createProperty,
+  getOwners,
+  getOwnerById,
+  getProperties,
+  upsertOwner,
+  updateOwner,
+  createOwner,
+  creatUnit,
+  updateUnit,
+  creatTenant,
+  updateTenant,
+};
