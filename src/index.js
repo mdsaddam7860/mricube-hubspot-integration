@@ -10,10 +10,17 @@ import {
 } from "./services/auth/tokenManager.js";
 import { getMRIAxios } from "./configs/mricube.config.js";
 import {
+  getRecordsById,
   fetchUnits,
   fetchTenants,
   fetchProperties,
   fetchOwners,
+  createUnittInMRI,
+  updateUnittInMRI,
+  createPropertytInMRI,
+  updatePropertytInMRI,
+  createTenantInMRI,
+  updateTenantInMRI,
 } from "./services/mricube.service.js";
 import {
   syncTenantsToHubspot,
@@ -52,6 +59,7 @@ import {
   unitProperties,
   tenantProperties,
   propertyProperties,
+  clean,
 } from "./utils/hubspot.util.js";
 
 import {
@@ -112,4 +120,12 @@ export {
   getHubspotClient,
   fetchToken,
   mriCubeTokenManager,
+  createUnittInMRI,
+  updateUnittInMRI,
+  createPropertytInMRI,
+  updatePropertytInMRI,
+  createTenantInMRI,
+  updateTenantInMRI,
+  getRecordsById,
+  clean,
 };

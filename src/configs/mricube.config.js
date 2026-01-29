@@ -1,5 +1,4 @@
 import axios from "axios";
-
 function getMRIAxios(token) {
   return axios.create({
     baseURL: process.env.MRI_API_BASE_URL,

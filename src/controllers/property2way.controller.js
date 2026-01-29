@@ -7,6 +7,14 @@ import {
   createProperty,
   propertyPayload,
   getPropertiesHS,
+  createUnittInMRI,
+  updateUnittInMRI,
+  createPropertytInMRI,
+  updatePropertytInMRI,
+  createTenantInMRI,
+  updateTenantInMRI,
+  mri_property_payload,
+  getRecordsById,
 } from "../index.js";
 import { mriExecutor, hubspotExecutor } from "../utils/executors.js";
 
@@ -71,6 +79,60 @@ async function syncPropertiesToHubspot() {
 async function syncHSPropertyToMRI() {
   try {
     // get property from hubspot and upsert it into MRI Cube
+    const properties = await getPropertiesHS();
+    logger.info(`Syncing ${properties.length} properties to MRI Cube...`);
+
+    for (const [index, property] of properties.entries()) {
+      try {
+        //➡️ Create or update property in MRI Cube
+        logger.info(
+          `Property at index ${index + 1}: ${JSON.stringify(property, null, 2)}`
+        );
+
+        // search property in MRI Cube
+        const endPoint = "properties";
+
+        let upsertProperty = await mriExecutor(
+          () => getRecordsById(endPoint, "1"),
+          { name: "Search property in MRI Cube" }
+        );
+
+        logger.info(
+          `Property FOUND: ${JSON.stringify(upsertProperty, null, 2)}`
+        );
+
+        // create payload
+        const payload = mri_property_payload(property, "1");
+        logger.info(`Property Payload ${JSON.stringify(payload, null, 2)}`);
+
+        // create or update property in MRI Cube
+
+        if (upsertProperty) {
+          //➡️ Update Property
+          upsertProperty = await mriExecutor(
+            () => createPropertytInMRI(payload),
+            { name: "Create Property in MRI Cube" }
+          );
+          logger.info(`Property UPDATED: ${JSON.stringify(upsertProperty)}`);
+        } else {
+          // ➡️ Create property
+          upsertProperty = await mriExecutor(
+            () => updatePropertytInMRI(payload),
+            { name: "Create Property in MRI Cube" }
+          );
+
+          logger.info(`Property CREATED: ${JSON.stringify(upsertProperty)}`);
+        }
+
+        return;
+      } catch (error) {
+        logger.info(
+          `Polling syncing properties ${JSON.stringify(property)} to MRI Cube:`,
+          error.response?.data || error
+        );
+        return;
+      }
+    }
   } catch (error) {
     logger.error("Error syncing proeperties to MRI Cube:", error);
   }

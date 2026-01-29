@@ -5,6 +5,12 @@ import {
   updateTenant,
   tenantPayload,
   getTenantsHS,
+  createUnittInMRI,
+  updateUnittInMRI,
+  createPropertytInMRI,
+  updatePropertytInMRI,
+  createTenantInMRI,
+  updateTenantInMRI,
 } from "../index.js";
 import { mriExecutor, hubspotExecutor } from "../utils/executors.js";
 

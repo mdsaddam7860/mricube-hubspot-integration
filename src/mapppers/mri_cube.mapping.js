@@ -1,3 +1,5 @@
+import { clean } from "../index.js";
+
 function mri_unit_payload(unit = {}) {
   return {
     unit: {
@@ -10,13 +12,14 @@ function mri_unit_payload(unit = {}) {
     },
   };
 }
-function mri_tenant_payload(tenant = {}) {
+function mri_tenant_payload(tenant = {}, tenantId = null) {
   return {
-    tenant: {
+    tenant: clean({
       // parentOwnerId: 0,
       // parentUnitId: 0,
       // parentTenantId: 0,
       // reference: "string",
+      id: tenantId,
       name: tenant.tenancy,
       // type: "string",
       // status: "string",
@@ -56,16 +59,18 @@ function mri_tenant_payload(tenant = {}) {
       // extraInformation6: "string",
       // extraDetails1: "string",
       // extraDetails2: "string",
-    },
+    }),
   };
 }
-function mri_property_payload(property = {}) {
+function mri_property_payload(propertyHS = {}, propertyId = null) {
+  const property = propertyHS.properties;
   return {
-    property: {
+    property: clean({
       // parentPropertyId: 0,
 
       // parentOwnerId: 0,
-      reference: property.property_reference,
+      id: propertyId,
+      reference: property.property_reference || "001",
       description: property.property,
       status: property.property_status,
       tenure: property.property_tenure,
@@ -77,7 +82,7 @@ function mri_property_payload(property = {}) {
       address5: property.property_address5,
       address6: property.property_address6,
       postcode: property.property_postcode,
-    },
+    }),
   };
 }
 

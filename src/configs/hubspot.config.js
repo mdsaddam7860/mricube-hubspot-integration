@@ -7,6 +7,7 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+    timeout: 15000,
   },
 });
 let hubspotClient = null;

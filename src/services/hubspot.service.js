@@ -1,4 +1,10 @@
-import { logger, ownerProperties } from "../index.js";
+import {
+  logger,
+  ownerProperties,
+  propertyProperties,
+  unitProperties,
+  tenantProperties,
+} from "../index.js";
 import { getHubspotClient } from "../configs/hubspot.config.js";
 import { hubspotExecutor } from "../utils/executors.js";
 
@@ -58,6 +64,7 @@ async function getOwners() {
       "Error fetching Owners from Hubspot:",
       error.response?.data || error
     );
+    throw error;
   }
 }
 async function getTenantsHS() {
@@ -93,6 +100,8 @@ async function getTenantsHS() {
       "Error fetching Tenants from Hubspot:",
       error.response?.data || error
     );
+
+    throw error;
   }
 }
 async function getUnitsHS() {
@@ -128,6 +137,7 @@ async function getUnitsHS() {
       "Error fetching units from Hubspot:",
       error.response?.data || error
     );
+    throw error;
   }
 }
 async function getPropertiesHS() {
@@ -135,7 +145,7 @@ async function getPropertiesHS() {
   let after = "";
   try {
     const properties_client = getCustomClientClient("properties");
-    const properties = ownerProperties();
+    const properties = propertyProperties();
 
     do {
       const response = await properties_client.search({
@@ -163,6 +173,7 @@ async function getPropertiesHS() {
       "Error fetching Properties from Hubspot:",
       error.response?.data || error
     );
+    throw error;
   }
 }
 
@@ -254,6 +265,7 @@ async function getProperties() {
       "Error fetching Property from Hubspot:",
       error.response?.data || error
     );
+    throw error;
   }
 }
 
@@ -273,6 +285,7 @@ async function upsertOwner(payload, owner) {
       "Error upsertOwner in Hubspot:",
       error.response?.data || error
     );
+    throw error;
   }
 }
 

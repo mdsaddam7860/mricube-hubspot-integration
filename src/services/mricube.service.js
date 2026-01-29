@@ -125,4 +125,133 @@ async function fetchOwners() {
   }
 }
 
-export { fetchUnits, fetchTenants, fetchProperties, fetchOwners };
+async function createTenantInMRI(tenant) {
+  try {
+    //➡️ Create tenant in mri cube
+    const accessToken = await mriCubeTokenManager.getToken();
+    const axios = getMRIAxios(accessToken);
+    const response = await axios.post("/tenants", tenant);
+
+    return response.data;
+  } catch (error) {
+    logger.error(
+      "Error creating Tenant in MRI Cube:",
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+async function updateTenantInMRI(tenant) {
+  try {
+    //➡️ Update tenant in mri cube
+    const accessToken = await mriCubeTokenManager.getToken();
+    const axios = getMRIAxios(accessToken);
+    const response = await axios.put("/tenants", tenant);
+
+    return response.data;
+  } catch (error) {
+    logger.error(
+      "Error updating Tenant in MRI Cube:",
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+async function createUnittInMRI(unit) {
+  try {
+    //➡️ Create tenant in mri cube
+    const accessToken = await mriCubeTokenManager.getToken();
+    const axios = getMRIAxios(accessToken);
+    const response = await axios.post("/units", unit);
+
+    return response.data;
+  } catch (error) {
+    logger.error(
+      "Error creating Unit in MRI Cube:",
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+async function updateUnittInMRI(unit) {
+  try {
+    //➡️ Update Unit in mri cube
+    const accessToken = await mriCubeTokenManager.getToken();
+    const axios = getMRIAxios(accessToken);
+    const response = await axios.put("/units", unit);
+
+    return response.data;
+  } catch (error) {
+    logger.error(
+      "Error updating Unit in MRI Cube:",
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+async function createPropertytInMRI(property) {
+  try {
+    //➡️ Create Property in mri cube
+    const accessToken = await mriCubeTokenManager.getToken();
+    const axios = getMRIAxios(accessToken);
+    const response = await axios.post("/properties", property);
+
+    return response.data;
+  } catch (error) {
+    logger.error(
+      "Error creating Property in MRI Cube:",
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+async function updatePropertytInMRI(property) {
+  try {
+    //➡️ Update Property in mri cube
+    const accessToken = await mriCubeTokenManager.getToken();
+    const axios = getMRIAxios(accessToken);
+    const response = await axios.put("/properties", property);
+
+    return response.data;
+  } catch (error) {
+    logger.error(
+      "Error Updating Property in MRI Cube:",
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+
+async function getRecordsById(endPoint, endPointId) {
+  if (!endPoint || !endPointId) {
+    throw new Error("Missing params for getRecordsById");
+  }
+
+  try {
+    const accessToken = await mriCubeTokenManager.getToken();
+    const axios = getMRIAxios(accessToken);
+    const response = await axios.get(`/${endPoint}/${endPointId}`);
+
+    return response.data;
+  } catch (error) {
+    logger.error(
+      `Error getting ${endPoint} by id in MRI Cube:`,
+      error.response?.data || error
+    );
+    throw error;
+  }
+}
+
+export {
+  getRecordsById,
+  fetchUnits,
+  fetchTenants,
+  fetchProperties,
+  fetchOwners,
+  createUnittInMRI,
+  updateUnittInMRI,
+  createPropertytInMRI,
+  updatePropertytInMRI,
+  createTenantInMRI,
+  updateTenantInMRI,
+};

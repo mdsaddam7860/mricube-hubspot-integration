@@ -94,8 +94,15 @@ function propertyProperties() {
     "block_manager",
   ];
 }
-
+function clean(props = {}) {
+  return Object.fromEntries(
+    Object.entries(props).filter(
+      ([, value]) => value !== null && value !== undefined
+    )
+  );
+}
 export {
+  clean,
   unitProperties,
   tenantProperties,
   ownerProperties,

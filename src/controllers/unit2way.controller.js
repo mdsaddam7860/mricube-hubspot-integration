@@ -5,6 +5,13 @@ import {
   updateUnit,
   unitPayload,
   getUnitsHS,
+  getRecordsById,
+  createUnittInMRI,
+  updateUnittInMRI,
+  createPropertytInMRI,
+  updatePropertytInMRI,
+  createTenantInMRI,
+  updateTenantInMRI,
 } from "../index.js";
 import { mriExecutor, hubspotExecutor } from "../utils/executors.js";
 
@@ -60,7 +67,27 @@ async function syncUnitsToHubspot() {
 
 async function syncHSUnitsToMRI() {
   try {
-    /**TODO - Get Tenants from HUbspot and upsert it into MRI Cube */
+    /**TODO - Get Units from HUbspot and upsert it into MRI Cube */
+
+    const units = await getUnitsHS();
+    logger.info(`Syncing ${units.length} units to MRI Cube...`);
+
+    for (const [index, unit] of units.entries()) {
+      try {
+        // Create or update unit in MRI Cube
+        logger.info(
+          `Unit at index ${index + 1}: ${JSON.stringify(unit, null, 2)}`
+        );
+        return;
+      } catch (error) {
+        logger.error(
+          `Polling syncing units ${JSON.stringify(unit)} to MRI Cube:`,
+          error.response?.data || error
+        );
+      }
+    }
+
+    logger.info(`Syncing ${JSON.stringify(units, null, 2)} units to MRI Cube`);
   } catch (error) {
     logger.error("Error syncing units to MRI Cube:", error);
   }
