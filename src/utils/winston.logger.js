@@ -18,11 +18,11 @@ const customTimestamp = timestamp({
 });
 
 const consoleFormat = printf(({ level, message, timestamp, stack }) => {
-  return `[${level}] ${timestamp} - ${stack || message}`;
+  return ` ${timestamp} - [${level}] - ${stack || message}`;
 });
 
 const fileFormat = printf(({ level, message, timestamp, stack }) => {
-  return `[${level}] ${timestamp} - ${stack || message}`;
+  return ` ${timestamp} - [${level}] - ${stack || message}`;
 });
 
 const productionLogger = () => {
@@ -47,7 +47,7 @@ const productionLogger = () => {
   return createLogger({
     level: process.env.LOG_LEVEL || "info",
     format: combine(customTimestamp, errors({ stack: true })),
-    defaultMeta: { service: "openphone-service" },
+    defaultMeta: { service: "MRI Cube-service" },
     transports: [
       dailyCombined, // all logs
       dailyError, // error-only logs

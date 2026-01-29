@@ -167,6 +167,7 @@ npm run start
 ## Security Considerations
 
 * OAuth / API-key based authentication
+* OAuth token rotation for MRI Cube
 * Secrets managed via environment variables
 * No PII logged
 
@@ -175,13 +176,50 @@ npm run start
 ## Repository Structure (Indicative)
 
 ```
-src/
- ├── clients/        # MRI & HubSpot API clients
- ├── services/       # Sync services
- ├── mappers/        # Field mappings
- ├── handlers/       # Webhooks / jobs
- ├── utils/          # Shared utilities
- └── index.ts
+MRICUBE-HUBSPOT-INTEGRATION/
+├── .github/
+│   └── workflows/               # CI/CD workflows (GitHub Actions)
+│
+├── logs/
+│   └── development.log          # Application logs (development)
+│
+├── node_modules/                # Installed dependencies
+│
+├── src/
+│   ├── configs/                 # Environment & app configuration files
+│   │
+│   ├── controllers/             # Controllers for 1-way / 2-way sync logic
+│   │   ├── owner1way.controller.js
+│   │   ├── property2way.controller.js
+│   │   ├── tenant2way.controller.js
+│   │   └── unit2way.controller.js
+│   │
+│   ├── mappers/                 # Data mapping between HubSpot & MRI Cube
+│   │   ├── hubspot.mapping.js
+│   │   └── mri_cube.mapping.js
+│   │
+│   ├── services/                # External service integrations
+│   │   ├── auth/
+│   │   │   └── tokenManager.js  # Token handling & refresh logic
+│   │   ├── hubspot.service.js   # HubSpot API service wrapper
+│   │   └── mricube.service.js   # MRI Cube API service wrapper
+│   │
+│   ├── utils/                   # Shared utilities (executors, helpers, retries)
+│   │
+│   ├── app.js                   # Express app initialization
+│   └── index.js                 # Application entry point
+│
+├── .env                         # Environment variables (ignored in git)
+├── .env.example                 # Sample environment variables
+├── .gitignore                   # Git ignore rules
+├── changelogs.md                # Project change history
+├── Dockerfile                   # Docker build configuration
+├── mri_cube_server.js           # Server bootstrap / legacy entry (if used)
+├── package.json                 # Project metadata & scripts
+├── package-lock.json            # Dependency lock file
+└── README.md                    # Project documentation
+
+ 
 ```
 
 ---
@@ -197,6 +235,7 @@ src/
 ## License
 
 Internal / Proprietary
+Mohammad Saddam
 
 ---
 

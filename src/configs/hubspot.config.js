@@ -1,11 +1,13 @@
 import { createClient } from "@mohammadsaddam-dev/hubspot-toolkit";
 import axios from "axios";
+import { logger } from "../index.js";
 
 const axiosInstance = axios.create({
   baseURL: "https://api.hubapi.com/",
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+    timeout: 15000,
   },
 });
 let hubspotClient = null;
